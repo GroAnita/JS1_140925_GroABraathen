@@ -11,8 +11,8 @@ async function fetchProducts() {
         console.log(data);
         const produkter = data.data || data;
         if (produkter && produkter.length > 0) {
-            // Display up to 3 products (one for each product box)
-            for (let i = 0; i < Math.min(3, produkter.length); i++) {
+            // viser inntil 3 produkter (1 for hver produkt boks)
+            for (let i = 0; i < produkter.length ; i++) {
                 displayProduct(produkter[i], i);
             }
         }
@@ -22,13 +22,13 @@ async function fetchProducts() {
     }
 }
 function displayProduct(product, index) {
-    // Find the specific product box (0, 1, or 2)
+    // Finne den spesifikke produkt boksen  (0, 1, eller 2)
     const productBoxes = document.querySelectorAll('.product_box');
     const currentBox = productBoxes[index];
     
-    if (!currentBox) return; // No box found for this index
+    if (!currentBox) return; // ingen boks funnet for denne indeksen
     
-    // Find elements within this specific product box
+    // Finn elementer innenfor denne spesifikke produkt boksen
     const titleElement = currentBox.querySelector('.product_info h3');
     const descriptionElement = currentBox.querySelector('.product_info p:first-of-type');
     const priceElement = currentBox.querySelector('.product_info p:last-of-type');
