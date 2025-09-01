@@ -60,6 +60,33 @@ function displaySingleProduct(product){
     
     const descriptionElement = document.getElementById('productDescription');
     if (descriptionElement) descriptionElement.textContent = product.description;
+    
+    // Add sizes to the dropdown
+    const sizeSelect = document.getElementById('sizeSelect');
+    if (sizeSelect && product.sizes && product.sizes.length > 0) {
+        // Clear existing options except the first one
+        sizeSelect.innerHTML = '<option value="">Select Size</option>';
+        
+        // Add each size as an option
+        product.sizes.forEach(size => {
+            const option = document.createElement('option');
+            option.value = size;
+            option.textContent = size;
+            sizeSelect.appendChild(option);
+        });
+    } else if (sizeSelect) {
+        // If no sizes in API data, add default clothing sizes
+        const defaultSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+        sizeSelect.innerHTML = '<option value="">Select Size</option>';
+        
+        defaultSizes.forEach(size => {
+            const option = document.createElement('option');
+            option.value = size;
+            option.textContent = size;
+            sizeSelect.appendChild(option);
+        });
+    }
+    
     const addToCartBtn = document.getElementById('addToCartBtn');
     if (addToCartBtn) {
         addToCartBtn.onclick = () => addToCart(product.id);
