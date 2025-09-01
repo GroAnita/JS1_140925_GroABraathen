@@ -54,3 +54,29 @@
 body{
     text-align: center;
 }
+.logofooter {
+    margin: 16px 0;
+}
+.logofooter img {
+    max-width: 400px;
+    height: auto;
+}
+
+.logo {
+margin-bottom: 16px;
+}
+.logo img {
+    max-width: 250px;
+    height: auto;
+}
+.pagination button {
+    background-color: #306b4e;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
