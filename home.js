@@ -353,6 +353,11 @@ function checkout(){
 fetchProducts().then(() => {
     updateCartCounter();
     
+    // Add this for checkout page
+    if (isCheckoutPage) {
+        loadCheckoutCart();
+    }
+    
     //  event listeners for cart
     const shoppingBag = document.querySelector('.shopping_bag');
     const closeCart = document.getElementById('closeCart');
@@ -381,3 +386,51 @@ fetchProducts().then(() => {
     }
     
 });
+
+// checkout
+
+const isCheckoutPage = window.location.pathname.includes('checkout.html');
+
+function loadCheckoutCart() {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+    }
+    displayCheckoutItems();
+    calculateCheckoutTotal();
+}
+
+function displayCheckoutItems() {
+    const cartItemsContainer = document.querySelector('.cart-items');
+    if (!cartItemsContainer) return;
+
+    cartItemsContainer.innerHTML = '';
+
+    cart.forEach((item, index) => {
+
+        const itemHTML = `
+            <div class="checkout-item">
+                <img src="${item.image}" alt="${item.title}">
+                <div class="item-details">
+                    <h3>${item.title}</h3>
+                    <p>Size: ${item.size}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                    <p>Price: $${item.price.toFixed(2)}</p>
+                </div>
+            </div>
+        `;
+        cartItemsContainer.innerHTML += itemHTML;
+    
+    });
+}
+
+function calculateCheckoutTotal() {
+    const total = cart.reduce((sum, item) => {
+        return sum + (item.price * item.quantity);
+    }, 0);
+
+    const totalElement = document.getElementById('totalAmount');
+    if (totalElement) {
+        totalElement.textContent = total.toFixed(2);
+    }
+}

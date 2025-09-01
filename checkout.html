@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <script async src="home.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+    <header>
+        <span class="top_header">
+        <div class="header_left">
+            
+        </div>
+        <div class="logo">
+            <img src="images/RainyDays_Logo.png" alt="RainyDays Logo" />
+        </div>
+        <div class="shopping_bag">
+            <i class="fa fa-shopping-bag"></i>
+            <span class="cart-count">0</span>
+        </div>
+        </span>
+        <span class="header_links">
+        <a href="index.html">Home</a>
+        <a href="about.html">about us</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+        </span>
+    </header>
+    
+    <!-- Shopping Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Your Cart</h2>
+                <span class="close-cart" id="closeCart">&times;</span>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be added here by JavaScript -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: $<span id="cartTotal">0.00</span></strong>
+                </div>
+                <button onClick="checkout()" class="checkout-btn">Checkout</button>
+            </div>
+        </div>
+    </div>
+    <div class="checkoutlayout">
+        <div class="returnCart">
+            <button onclick="showCart()" id="returnToCartButton">Return to Cart</button>
+        </div>
+        <h1>Products in Cart</h1>
+        <div class="cart_items"></div>
+            <!-- Cart items will be dynamically added here -->
+        </div>
+
+        <div class="total_amount">
+            <h2>Total Amount: $<span id="totalAmount">0.00</span></h2>
+            <h3>Checkout</h3>
+            <div class="checkout_form">
+                <form id="checkoutForm">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="phone">Phone:</label>
+                    <input type="tel" id="phone" name="phone" required>
+
+                    <label for="cardNumber">Card Number:</label>
+                    <input type="text" id="cardNumber" name="cardNumber" required>
+
+                    <button type="submit">Place Order</button>
+                </form>
+
+    </div>
+
+    <footer>
+        <div class="logofooter">
+            <img src="images/RainyDays_Logo.png" alt="RainyDays Logo" />
+        </div>
+        <p>&copy; 2025 RainyDays. All rights reserved.</p>
+    </footer>
+</div>
+</body>
+</html>
