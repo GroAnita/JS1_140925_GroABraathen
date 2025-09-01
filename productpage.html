@@ -50,32 +50,96 @@
         </div>
     </div>
     
-    <h1>Welcome to RainyDays</h1>
-    <h2>Check out our latest products</h2>
-    <span class="filter">
-        <select id="categoryFilter">
-            <option value="">All Categories</option>
-            <option value="women">Womens Clothing</option>
-            <option value="men">Mens Clothing</option>
-            <option value="accessories">Accessories</option>
-        </select>
-    </span>
-    <div class="product_box product" data-id="1">
-        <div class="product_img">
-            <img src="" alt="Product Image" />
+    <!-- Product Detail Page -->
+    <div class="product-detail-container">
+        <div class="product-images">
+            <div class="main-image">
+                <img id="mainProductImage" src="" alt="Product Image" />
+            </div>
+            <div class="thumbnail-images">
+                <!-- Additional product images will go here -->
+            </div>
         </div>
-        <div class="product_info">
-            <h3>Product Title</h3>
-            <p>Product description goes here.</p>
-            <p>Price: $XX.XX</p>
-            <button id="addToCartButton">Add to Cart</button>
+        
+        <div class="product-details">
+            <h1 id="productTitle">Loading...</h1>
+            <div class="product-rating">
+                <span id="productRating">★★★★☆</span>
+                <span id="reviewCount">(0 reviews)</span>
+            </div>
+            <div class="product-price">
+                <span id="productPrice">$0.00</span>
+                <span id="originalPrice" class="original-price">$0.00</span>
+            </div>
+            <div class="product-description">
+                <h3>Description</h3>
+                <p id="productDescription">Loading product description...</p>
+            </div>
+            <div class="product-features">
+                <h3>Features</h3>
+                <ul id="productFeatures">
+                    <!-- Features will be added by JavaScript -->
+                </ul>
+            </div>
+            <div class="product-specifications">
+                <h3>Specifications</h3>
+                <div id="productSpecs">
+                    <!-- Specifications will be added by JavaScript -->
+                </div>
+            </div>
+            <div class="product-options">
+                <div class="size-selector">
+                    <label for="sizeSelect">Size:</label>
+                    <select id="sizeSelect">
+                        <option value="">Select Size</option>
+                    </select>
+                </div>
+                <div class="color-selector">
+                    <label for="colorSelect">Color:</label>
+                    <select id="colorSelect">
+                        <option value="">Select Color</option>
+                    </select>
+                </div>
+                <div class="quantity-selector">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" value="1" min="1" max="10">
+                </div>
+            </div>
+            <div class="product-actions">
+                <button id="addToCartBtn" class="add-to-cart-btn">Add to Cart</button>
+                <button id="buyNowBtn" class="buy-now-btn">Buy Now</button>
+            </div>
         </div>
     </div>
+    
+    <!-- Additional Information Tabs -->
+    <div class="product-tabs">
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="reviews">Reviews</button>
+            <button class="tab-btn" data-tab="shipping">Shipping Info</button>
+            <button class="tab-btn" data-tab="care">Care Instructions</button>
+        </div>
+        <div class="tab-content">
+            <div id="reviews" class="tab-pane active">
+                <div class="reviews-section">
+                    <h3>Customer Reviews</h3>
+                    <div id="reviewsList">
+                        <!-- Reviews will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            <div id="shipping" class="tab-pane">
+                <h3>Shipping Information</h3>
+                <p>Free shipping on orders over $100. Standard delivery 3-5 business days.</p>
+            </div>
+            <div id="care" class="tab-pane">
+                <h3>Care Instructions</h3>
+                <p>Machine wash cold, tumble dry low. Do not bleach.</p>
+            </div>
+        </div>
+    </div>
+    
     <script src="home.js"></script>
-    <div class="pagination">
-        <button id="prevPage">Previous</button>
-        <button id="nextPage">Next</button>
-    </div>
     <footer>
         <div class="logofooter">
             <img src="images/RainyDays_Logo.png" alt="RainyDays Logo" />

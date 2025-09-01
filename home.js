@@ -2,6 +2,8 @@ const API_URL = "https://v2.api.noroff.dev/rainy-days";
 
 let products = [];
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+const isProductPage = window.location.pathname.includes('productpage.html');
+const isHomePage = window.location.pathname.includes('index.html');
 
 async function fetchProducts() {
     if (!API_URL) {
@@ -13,11 +15,20 @@ async function fetchProducts() {
         const data = await respons.json();
         console.log(data);
         const produkter = data.data || data;
-        products = produkter; // Store products globally
+        products = produkter; // lagre produkter globalt
         if (produkter && produkter.length > 0) {
+            if(isProductPage) {
+                const productId = getProductId() || produkter[0].id;
+                const product = produkter.find(p => p.id === productId);
+                if(product) {
+                    displaySingleProduct(product);
+                } 
+            }
             // viser inntil 3 produkter (1 for hver produkt boks)
-            for (let i = 0; i < Math.min(3, produkter.length); i++) {
-                displayProduct(produkter[i], i);
+            else if(isHomePage) {
+                for (let i = 0; i < Math.min(3, produkter.length); i++) {
+                    displayProduct(produkter[i], i);
+                }
             }
         }
     }
@@ -26,6 +37,34 @@ async function fetchProducts() {
     }
 }
 
+function getProductId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+}
+
+function displaySingleProduct(product){
+    const titleElement = document.getElementById('productTitle');
+    if (titleElement) titleElement.textContent = product.title;
+
+    const imageElement = document.getElementById('mainProductImage');
+    if (imageElement && product.image) {
+        imageElement.src = product.image.url;
+        imageElement.alt = product.image.alt || product.title;
+    }
+    const priceElement = document.getElementById('productPrice');
+    if (priceElement) priceElement.textContent = `Price: $${product.price}`;
+    
+    const descriptionElement = document.getElementById('productDescription');
+    if (descriptionElement) descriptionElement.textContent = product.description;
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    if (addToCartBtn) {
+        addToCartBtn.onclick = () => addToCart(product.id);
+    }
+}
+
+
+
+
 function displayProduct(product, index) {
     // Finne den spesifikke produkt boksen  (0, 1, eller 2)
     const productBoxes = document.querySelectorAll('.product_box');
@@ -33,7 +72,7 @@ function displayProduct(product, index) {
     
     if (!currentBox) return; // ingen boks funnet for denne indeksen
     
-    // Set the product ID on the box
+    //  product ID på box
     currentBox.dataset.productId = product.id;
     
     // Finne elementer innenfor denne spesifikke produkt boksen
@@ -50,8 +89,8 @@ function displayProduct(product, index) {
         imageElement.src = product.image.url;
         imageElement.alt = product.image.alt || product.title;
     }
-    
-    // Add click event to the button
+
+    // klikk hendelse til knappen
     if (buttonElement) {
         buttonElement.onclick = () => addToCart(product.id);
     }
@@ -64,7 +103,7 @@ function addToCart(productId) {
         return;
     }
     
-    // Check if product already exists in cart
+    // sjekk om produktet allerede finnes i kurven
     let existingItem = cart.find(item => item.id === productId);
     
     if (existingItem) {
@@ -79,10 +118,10 @@ function addToCart(productId) {
         });
     }
     
-    // Save to localStorage
+    // Lagre til localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
     
-    // Update cart counter
+    // oppdatere cart teller
     updateCartCounter();
     
     console.log("Product added to cart:", product.title);
@@ -166,15 +205,35 @@ function hideCart() {
     }
 }
 
-// Initialize the app
+function initializeProductTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+
+            button.classList.add('active');
+
+            const tabName = button.getAttribute("data-tab");
+            const tabPane = document.getElementById(tabName);
+            if (tabPane) tabPane.classList.add('active');
+        });
+    });
+}
+
+// starte "appen"
 fetchProducts().then(() => {
     updateCartCounter();
     
-    // Add event listeners for cart
+    //  event listeners for cart
     const shoppingBag = document.querySelector('.shopping_bag');
     const closeCart = document.getElementById('closeCart');
     const cartOverlay = document.getElementById('cartOverlay');
-    
+    if (isProductPage) {
+        initializeProductTabs();
+    }
     if (shoppingBag) {
         shoppingBag.addEventListener('click', showCart);
     }
@@ -183,7 +242,7 @@ fetchProducts().then(() => {
         closeCart.addEventListener('click', hideCart);
     }
     
-    // Close cart when clicking outside
+    // Lukk cart når man klikker utenfor
     if (cartOverlay) {
         cartOverlay.addEventListener('click', (e) => {
             if (e.target === cartOverlay) {
@@ -191,4 +250,5 @@ fetchProducts().then(() => {
             }
         });
     }
+    
 });
