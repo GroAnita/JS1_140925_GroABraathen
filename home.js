@@ -261,6 +261,81 @@ function initializeProductTabs() {
     });
 }
 
+function initializeFilter() {
+    const filterSelect = document.getElementById('categoryFilter');
+    if (!filterSelect) return;
+    
+    filterSelect.addEventListener('change', (e) => {
+        const selectedCategory = e.target.value;
+        if (selectedCategory === '') {
+            // Show all products - reload the page
+            location.reload();
+        } else {
+            filterProducts(selectedCategory);
+        }
+    });
+}
+
+function filterProducts(category) {
+    if (!products || products.length === 0) return;
+
+    let filteredProducts = products;
+
+    if (category && category !== 'all') {
+        filteredProducts = products.filter(product => {
+            const productGender = product.gender ? product.gender.toLowerCase() : '';
+            const productTitle = product.title ? product.title.toLowerCase() : '';
+            const productTags = product.tags ? product.tags.join(', ').toLowerCase() : '';
+
+            switch (category) {
+                case "women":
+                    return productGender.includes("female") || 
+                           productTitle.includes('women') || 
+                           productTitle.includes('female') ||
+                           productTags.includes('women') ||
+                           productTags.includes('female');
+
+                case "men":
+                    return productGender.includes("male") || 
+                           productTitle.includes('men') || 
+                           productTitle.includes('male') ||
+                           productTags.includes('men') ||
+                           productTags.includes('male');
+
+                case 'accessories':
+                    return productTitle.includes('accessory') ||
+                           productTitle.includes('accessories') ||
+                           productTags.includes('accessories');
+
+                default:
+                    return true;
+            }
+        });
+    }
+    
+    // Display filtered products
+    displayFilteredProducts(filteredProducts);
+}
+
+function displayFilteredProducts(filteredProducts) {
+    const productBoxes = document.querySelectorAll('.product_box');
+    
+    // Hide all product boxes first
+    productBoxes.forEach(box => {
+        box.style.display = 'none';
+    });
+
+    // Display up to 3 filtered products
+    const maxProducts = Math.min(3, filteredProducts.length);
+
+    for (let i = 0; i < maxProducts; i++) {
+        if (productBoxes[i]) {
+            displayProduct(filteredProducts[i], i);
+            productBoxes[i].style.display = 'block';
+        }
+    }
+}
+
 // starte "appen"
 fetchProducts().then(() => {
     updateCartCounter();
@@ -271,6 +346,9 @@ fetchProducts().then(() => {
     const cartOverlay = document.getElementById('cartOverlay');
     if (isProductPage) {
         initializeProductTabs();
+    }
+    if (isHomePage) {
+        initializeFilter();
     }
     if (shoppingBag) {
         shoppingBag.addEventListener('click', showCart);
