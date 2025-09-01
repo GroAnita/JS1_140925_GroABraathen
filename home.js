@@ -313,7 +313,7 @@ function filterProducts(category) {
         });
     }
     
-    // Display filtered products
+    // vise filtrerte produkter
     displayFilteredProducts(filteredProducts);
 }
 
@@ -325,7 +325,7 @@ function displayFilteredProducts(filteredProducts) {
         box.style.display = 'none';
     });
 
-    // Display up to 12 filtered products
+    // viser inntill 12 filtrerte produkter
     const maxProducts = Math.min(12, filteredProducts.length);
 
     for (let i = 0; i < maxProducts; i++) {
@@ -334,6 +334,19 @@ function displayFilteredProducts(filteredProducts) {
             productBoxes[i].style.display = 'block';
         }
     }
+}
+
+function checkout(){
+    if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+
+    // Save cart to localStorage before redirecting (it's already saved, but just to be sure)
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Redirect to checkout page
+    window.location.href = 'checkout.html';
 }
 
 // starte "appen"
