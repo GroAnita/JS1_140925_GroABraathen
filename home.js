@@ -100,6 +100,13 @@ function displayProduct(product, index) {
     // Finne den spesifikke produkt boksen  (0, 1, eller 2)
     const productBoxes = document.querySelectorAll('.product_box');
     const currentBox = productBoxes[index];
+
+    if(currentBox) {
+        currentBox.style.cursor = 'pointer';
+        currentBox.addEventListener('click', () => {
+            window.location.href = `productpage.html?id=${product.id}`;
+        });
+    }
     
     if (!currentBox) return; // ingen boks funnet for denne indeksen
     
