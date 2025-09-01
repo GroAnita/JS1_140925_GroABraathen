@@ -28,9 +28,9 @@ async function fetchProducts() {
                     displaySingleProduct(product);
                 } 
             }
-            // viser inntil 3 produkter (1 for hver produkt boks)
+            // viser inntil 12 produkter (1 for hver produkt boks)
             else if(isHomePage) {
-                for (let i = 0; i < Math.min(3, produkter.length); i++) {
+                for (let i = 0; i < Math.min(12, produkter.length); i++) {
                     displayProduct(produkter[i], i);
                 }
             }
@@ -325,8 +325,8 @@ function displayFilteredProducts(filteredProducts) {
         box.style.display = 'none';
     });
 
-    // Display up to 3 filtered products
-    const maxProducts = Math.min(3, filteredProducts.length);
+    // Display up to 12 filtered products
+    const maxProducts = Math.min(12, filteredProducts.length);
 
     for (let i = 0; i < maxProducts; i++) {
         if (productBoxes[i]) {
