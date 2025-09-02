@@ -294,13 +294,15 @@ function filterProducts(category) {
                            productTitle.includes('female') ||
                            productTags.includes('women') ||
                            productTags.includes('female');
-
+                           
+                    //had to find a different way to write this code because 
+                    //it also came back with the women clothes when i did as above
                 case "men":
-                    return productGender.includes("male") || 
-                           productTitle.includes('men') || 
-                           productTitle.includes('male') ||
-                           productTags.includes('men') ||
-                           productTags.includes('male');
+                     return productGender === "male" || 
+                        /\bmen\b/i.test(productTitle) || 
+                        /\bmale\b/i.test(productTitle) ||
+                        /\bmen\b/i.test(productTags) ||
+                        /\bmale\b/i.test(productTags);
 
                 case 'accessories':
                     return productTitle.includes('accessory') ||
