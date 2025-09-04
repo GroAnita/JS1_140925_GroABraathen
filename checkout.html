@@ -54,11 +54,11 @@
         </div>
         <h1>Products in Cart</h1>
         <div class="cart_items"></div>
-            <!-- Cart items will be dynamically added here -->
+            <!-- Cart items will be dynamically added here, no need for text -->
         </div>
 
         <div class="total_amount">
-            <h2>Total Amount: $<span id="totalAmount">0.00</span></h2>
+            <h2 class="checkouth2">Total Amount: $<span id="totalAmount">0.00</span></h2>
             <h3>Checkout</h3>
             <div class="checkout_form">
                 <form id="checkoutForm">
@@ -77,7 +77,7 @@
                     <label for="cardNumber">Card Number:</label>
                     <input type="text" id="cardNumber" name="cardNumber" required>
 
-                    <button type="submit">Place Order</button>
+                    <button type="submit" onClick="placeOrder(event)">Place Order</button>
                 </form>
 
     </div>
@@ -88,6 +88,24 @@
         </div>
         <p>&copy; 2025 RainyDays. All rights reserved.</p>
     </footer>
+
+    <!-- Success of purchase Modal -->
+    <div id="purchaseSuccessModal" class="alert-modal">
+        <div class="alert-modal-content success-modal">
+            <span class="success-close">&times;</span>
+            <div class="success-icon">✅</div>
+            <h3>Purchase Confirmed!</h3>
+            <div class="purchase-details">
+                <p><strong>Thank you for your purchase!</strong></p>
+                <div class="purchase-info">
+                    <p><strong>Order ID:</strong> <span id="purchaseId">#123456</span></p>
+                    <p><strong>Estimated Delivery:</strong> <span id="deliveryDate">7-10 business days</span></p>
+                </div>
+                <p class="success-message">Your order has been successfully processed and will be shipped soon.</p>
+            </div>
+            <button id="successOkBtn" class="alert-btn success-btn">Continue Shopping</button>
+        </div>
+    </div>
 </div>
 </body>
 </html>

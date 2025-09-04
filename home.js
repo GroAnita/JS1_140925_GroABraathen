@@ -91,13 +91,17 @@ function displaySingleProduct(product){
     if (addToCartBtn) {
         addToCartBtn.onclick = () => addToCart(product.id);
     }
+    const buyNowBtn = document.getElementById('buyNowBtn');
+    if (buyNowBtn) {
+        buyNowBtn.onclick = () => buyNow();
+    }
 }
 
 
 
 
 function displayProduct(product, index) {
-    // Finne den spesifikke produkt boksen  (0, 1, eller 2)
+    // Finne den spesifikke produkt boksen  
     const productBoxes = document.querySelectorAll('.product_box');
     const currentBox = productBoxes[index];
 
@@ -159,7 +163,7 @@ function addToCart(productId) {
     // Lagre til localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
     
-    // oppdatere cart teller
+    // oppdatering cart teller
     updateCartCounter();
     
     console.log("Product added to cart:", product.title);
@@ -194,6 +198,8 @@ function displayCartItems() {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
         
+//template literals : ${item.image}. tar image propertien og setter den som en src verdi : f.eks. https://rainydays.no/powerjacket.jpg og samme med item.title som da henter tittelen fra objektet og den blir alt tekst f.eks :  Rainjacket 
+
         const cartItemHTML = `
             <div class="cart-item">
                 <img src="${item.image}" alt="${item.title}" class="cart-item-image">
@@ -213,15 +219,15 @@ function displayCartItems() {
     
     cartTotal.textContent = total.toFixed(2);
 }
-
-function changeQuantity(itemIndex, change) {
-    if (itemIndex >= 0 && itemIndex < cart.length) {
-        cart[itemIndex].quantity += change;
-        
-        if (cart[itemIndex].quantity <= 0) {
-            cart.splice(itemIndex, 1);
+//funksjonen for å endre antall varer i handlekurven, basert på brukeren klikker + eller - for å legge til eller fjerne produkter. Når antallet kommer til 0 skal produktet fjernes helt fra kurven. 
+function changeQuantity(itemAmount, change) {
+    if (itemAmount >= 0 && itemAmount < cart.length) {
+        cart[itemAmount].quantity += change;
+//splice fjerner produktet når man kommer til 0
+        if (cart[itemAmount].quantity <= 0) {
+            cart.splice(itemAmount, 1);
         }
-        
+        //oppdaterer til localstorage og refresher kurven til nåværende resultat.
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCounter();
         displayCartItems();
@@ -243,6 +249,50 @@ function hideCart() {
     }
 }
 
+function buyNow(){
+    console.log("buy now function logget?")
+    const selectedProduct = getSelectedProduct();
+    const sizeSelect = document.getElementById('sizeSelect');
+    const selectedSize = sizeSelect ? sizeSelect.value : '';
+
+    if (sizeSelect && !selectedSize) {
+        showCustomAlert("Please choose a size before buying!", "Size Required");
+        return;
+    }
+
+    selectedProduct.size = selectedSize;
+    
+    selectedProduct.id = getProductId();
+
+    let existingItem = cart.find(item => item.id === selectedProduct.id);
+    if(existingItem){
+        existingItem.quantity += 1;
+    } else {
+        cart.push(selectedProduct);
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    updateCartCounter();
+
+    // Redirect to checkout page
+    window.location.href = 'checkout.html';
+    }
+
+function getSelectedProduct(){
+    const productTitle = document.getElementById('productTitle').textContent;
+    const priceText = document.getElementById('productPrice').textContent;
+    const productPrice = parseFloat(priceText.replace(/[^0-9.]/g, ''));
+    const productImage = document.getElementById('mainProductImage').src;
+
+    return {
+        title: productTitle,
+        price: productPrice,
+        image: productImage,
+        quantity: 1
+    };
+}
+
+//jeg har noen "tabs" på product sidene med reviews, shipping info etc.. denne funksjonen er for å aktivere disse sånn at de er aktive 1 om gangen så man jo da bare ser 1 fane om gangen. Og den fanen som er aktiv er da blå (satt i css som active class)
 function initializeProductTabs() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
@@ -281,27 +331,43 @@ function filterProducts(category) {
 
     let filteredProducts = products;
 
- function filterProducts(category) {
-    if (!products || products.length === 0) return;
+    if (category && category !== 'all') {
+        filteredProducts = products.filter(product => {
+            const productGender = product.gender ? product.gender.toLowerCase() : '';
+            const productTitle = product.title ? product.title.toLowerCase() : '';
+            const productTags = product.tags ? product.tags.join(', ').toLowerCase() : '';
+
+            switch (category) {
+                case "women":
+                    return productGender.includes("female") || 
+                           productTitle.includes('women') || 
+                           productTitle.includes('female') ||
+                           productTags.includes('women') ||
+                           productTags.includes('female');
+                           
+                    //had to find a different way to write this code because 
+                    //it also came back with the women clothes when i did as above
+                case "men":
+                     return productGender === "male" || 
+                        /\bmen\b/i.test(productTitle) || 
+                        /\bmale\b/i.test(productTitle) ||
+                        /\bmen\b/i.test(productTags) ||
+                        /\bmale\b/i.test(productTags);
+
+                case 'accessories':
+                    return productTitle.includes('accessory') ||
+                           productTitle.includes('accessories') ||
+                           productTags.includes('accessories');
+
+                default:
+                    return true;
+            }
+        });
+    }
     
-    const filteredProducts = products.filter(product => {
-        const gender = product.gender?.toLowerCase() || '';
-        
-        switch (category) {
-            case "women":
-                return gender === "female";
-            case "men":
-                return gender === "male";
-            case "accessories":
-                return product.tags?.includes("accessories");
-            default:
-                return true;
-        }
-    });
-    
+    // vise filtrerte produkter
     displayFilteredProducts(filteredProducts);
 }
-    
 
 function displayFilteredProducts(filteredProducts) {
     const productBoxes = document.querySelectorAll('.product_box');
@@ -328,7 +394,7 @@ function checkout(){
         return;
     }
 
-    // Save cart to localStorage before redirecting (it's already saved, but just to be sure)
+    // Saving cart to localStorage before redirecting (it's already saved, but just to be sure)
     localStorage.setItem('cart', JSON.stringify(cart));
     
     // Redirect to checkout page
@@ -344,7 +410,7 @@ fetchProducts().then(() => {
         loadCheckoutCart();
     }
     
-    //  event listeners for cart
+    //  event listeners for my cart
     const shoppingBag = document.querySelector('.shopping_bag');
     const closeCart = document.getElementById('closeCart');
     const cartOverlay = document.getElementById('cartOverlay');
@@ -371,9 +437,12 @@ fetchProducts().then(() => {
         });
     }
     
+    // Initialize custom alert modal
+    initializeCustomAlert();
+    
 });
 
-// checkout
+// Checkout
 
 const isCheckoutPage = window.location.pathname.includes('checkout.html');
 
@@ -418,5 +487,125 @@ function calculateCheckoutTotal() {
     const totalElement = document.getElementById('totalAmount');
     if (totalElement) {
         totalElement.textContent = total.toFixed(2);
+    }
+}
+
+
+// Custom Alert Modal Functions testing
+function showCustomAlert(message, title = "Alert") {
+    document.getElementById('alertTitle').textContent = title;
+    document.getElementById('alertMessage').textContent = message;
+    document.getElementById('customAlert').style.display = 'block';
+}
+
+function closeCustomAlert() {
+    document.getElementById('customAlert').style.display = 'none';
+}
+
+// Purchase Success Modal Functions
+function showPurchaseSuccess() {
+    // Generate random order ID
+    const orderId = '#RD' + Math.floor(Math.random() * 1000000);
+    
+    // Calculate delivery date (7-14 days from now)
+    const deliveryDays = Math.floor(Math.random() * 8) + 7; // 7-14 days
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + deliveryDays);
+    const formattedDate = deliveryDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    
+    // Update modal content
+    document.getElementById('purchaseId').textContent = orderId;
+    document.getElementById('deliveryDate').textContent = formattedDate;
+    
+    // Show modal
+    document.getElementById('purchaseSuccessModal').style.display = 'block';
+}
+
+function closePurchaseSuccess() {
+    document.getElementById('purchaseSuccessModal').style.display = 'none';
+}
+
+// Place Order function for checkout page
+function placeOrder(event) {
+    event.preventDefault(); // Prevent form submission
+    
+    // Validate that there are items in cart
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+    
+    // Clear the cart after successful order
+    cart = [];
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCounter();
+    
+    // Show purchase success modal
+    showPurchaseSuccess();
+}
+
+// Legacy function for backward compatibility
+function showAlert(message) {
+    showCustomAlert(message);
+}
+
+function closeAlert() {
+    closeCustomAlert();
+}
+
+// Initialize Custom Alert confirmedPurchase Modal
+function initializeCustomAlert() {
+    const alertModal = document.getElementById('customAlert');
+    const closeBtn = document.querySelector('.alert-close');
+    const okBtn = document.getElementById('alertOkBtn');
+    
+    if (closeBtn) {
+        closeBtn.onclick = closeCustomAlert;
+    }
+    
+    if (okBtn) {
+        okBtn.onclick = closeCustomAlert;
+    }
+    
+    // Closing when clicking outside the modal
+    if (alertModal) {
+        alertModal.onclick = function(event) {
+            if (event.target === alertModal) {
+                closeCustomAlert();
+            }
+        }
+    }
+    
+    // Initialize Purchase Success Modal (only on checkout page)
+    if (isCheckoutPage) {
+        const successModal = document.getElementById('purchaseSuccessModal');
+        const successCloseBtn = document.querySelector('.success-close');
+        const successOkBtn = document.getElementById('successOkBtn');
+        
+        if (successCloseBtn) {
+            successCloseBtn.onclick = closePurchaseSuccess;
+        }
+        
+        if (successOkBtn) {
+            successOkBtn.onclick = function() {
+                closePurchaseSuccess();
+                // Redirect to home page for continued shopping
+                window.location.href = 'index.html';
+            };
+        }
+        
+        // Close when clicking outside the success modal
+        if (successModal) {
+            successModal.onclick = function(event) {
+                if (event.target === successModal) {
+                    closePurchaseSuccess();
+                }
+            }
+        }
     }
 }
