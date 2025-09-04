@@ -281,43 +281,27 @@ function filterProducts(category) {
 
     let filteredProducts = products;
 
-    if (category && category !== 'all') {
-        filteredProducts = products.filter(product => {
-            const productGender = product.gender ? product.gender.toLowerCase() : '';
-            const productTitle = product.title ? product.title.toLowerCase() : '';
-            const productTags = product.tags ? product.tags.join(', ').toLowerCase() : '';
-
-            switch (category) {
-                case "women":
-                    return productGender.includes("female") || 
-                           productTitle.includes('women') || 
-                           productTitle.includes('female') ||
-                           productTags.includes('women') ||
-                           productTags.includes('female');
-                           
-                    //had to find a different way to write this code because 
-                    //it also came back with the women clothes when i did as above
-                case "men":
-                     return productGender === "male" || 
-                        /\bmen\b/i.test(productTitle) || 
-                        /\bmale\b/i.test(productTitle) ||
-                        /\bmen\b/i.test(productTags) ||
-                        /\bmale\b/i.test(productTags);
-
-                case 'accessories':
-                    return productTitle.includes('accessory') ||
-                           productTitle.includes('accessories') ||
-                           productTags.includes('accessories');
-
-                default:
-                    return true;
-            }
-        });
-    }
+ function filterProducts(category) {
+    if (!products || products.length === 0) return;
     
-    // vise filtrerte produkter
+    const filteredProducts = products.filter(product => {
+        const gender = product.gender?.toLowerCase() || '';
+        
+        switch (category) {
+            case "women":
+                return gender === "female";
+            case "men":
+                return gender === "male";
+            case "accessories":
+                return product.tags?.includes("accessories");
+            default:
+                return true;
+        }
+    });
+    
     displayFilteredProducts(filteredProducts);
 }
+    
 
 function displayFilteredProducts(filteredProducts) {
     const productBoxes = document.querySelectorAll('.product_box');
