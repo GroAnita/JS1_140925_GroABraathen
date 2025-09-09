@@ -249,8 +249,7 @@ function hideCart() {
     }
 }
 
-function buyNow(){
-    console.log("buy now function logget?")
+function buyNow(){ 
     const selectedProduct = getSelectedProduct();
     const sizeSelect = document.getElementById('sizeSelect');
     const selectedSize = sizeSelect ? sizeSelect.value : '';
@@ -479,7 +478,19 @@ function displayCheckoutItems() {
     });
 }
 
+// Call this when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Update cart counter on all pages
+    updateCartCounter();
+    
+    // If we're on checkout page, display items
+    if (window.location.pathname.includes('checkout.html')) {
+        displayCheckoutItems();
+    }
+});
+
 function calculateCheckoutTotal() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const total = cart.reduce((sum, item) => {
         return sum + (item.price * item.quantity);
     }, 0);
@@ -608,4 +619,47 @@ function initializeCustomAlert() {
             }
         }
     }
+}
+
+function displayCheckoutItems() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItemsContainer = document.querySelector('.cart_items');
+    const totalAmountElement = document.getElementById('totalAmount');
+    
+    // Check if we're on the checkout page
+    if (!cartItemsContainer || !totalAmountElement) return;
+    
+    // If cart is empty
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+        totalAmountElement.textContent = '0.00';
+        return;
+    }
+    
+    let total = 0;
+    cartItemsContainer.innerHTML = '';
+    
+    // Loop through each cart item
+    cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        // Create HTML for each item
+        const cartItemHTML = `
+            <div class="checkout-item">
+                <img src="${item.image}" alt="${item.title}" class="checkout-item-image">
+                <div class="checkout-item-details">
+                    <div class="checkout-item-title">${item.title}</div>
+                    <div class="checkout-item-size">Size: ${item.size || 'Not specified'}</div>
+                    <div class="checkout-item-price">$${item.price.toFixed(2)} x ${item.quantity}</div>
+                    <div class="checkout-item-total">Total: $${itemTotal.toFixed(2)}</div>
+                </div>
+            </div>
+        `;
+        
+        cartItemsContainer.innerHTML += cartItemHTML;
+    });
+    
+    // Update total amount
+    totalAmountElement.textContent = total.toFixed(2);
 }
