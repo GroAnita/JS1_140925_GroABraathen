@@ -187,7 +187,7 @@ function displayProducts(products) {
         viewProductButton.className = "view-product";
         viewProductButton.textContent = "View Product";
         viewProductButton.addEventListener('click', function() {
-            window.location.href = `product.html?id=${product.id}`;
+            window.location.href = `productpage.html?id=${product.id}`;
         });
         content.appendChild(viewProductButton);
         

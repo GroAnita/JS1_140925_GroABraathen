@@ -33,7 +33,7 @@ img {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     background: white;
     min-width: 400px;
-    height: 470px; /* Increased height for two buttons */
+    height: 500px;
 }
 
 .product_box .price-container {
@@ -44,12 +44,10 @@ img {
     gap: 10px;
 }
 
-/* When price-container has only one child (regular price), center it */
 .product_box .price-container:has(:only-child) {
     justify-content: center;
 }
 
-/* Alternative for browsers that don't support :has() */
 .product_box .price-container .card-price:only-child {
     margin: 0 auto;
 }
@@ -85,7 +83,7 @@ img {
     left: 0;
     right: 0;
     width: 100%;
-    padding: 5px 24px;
+    padding: 10px 24px;
     border: 2px solid #007bff;
     border-radius: 4px;
     background-color: #0052a3;
@@ -112,7 +110,7 @@ img {
     font-size: 14px;
     font-weight: 500;
     color: #333;
-    margin-bottom: 5px;
+    
 }
 
 .product_box .size-dropdown {
@@ -123,6 +121,7 @@ img {
     font-size: 14px;
     cursor: pointer;
     transition: border-color 0.3s ease;
+    margin-bottom: 15px;
 }
 
 .product_box .size-dropdown:focus {
@@ -222,9 +221,12 @@ img {
 .header_links a{
     margin: 0 12px;
     text-decoration: none;
+    color: #02264c;
+}
+.header_links a:hover {
+    text-decoration: underline;
     color: #007bff;
 }
-
 .top_header {
     display: flex;
     justify-content: space-between;
@@ -279,9 +281,7 @@ img {
     height: 50px;
 }
 
-.header_links a:hover {
-    text-decoration: underline;
-}
+
 
 footer {
     background-color: #f8f9fa;
@@ -331,18 +331,20 @@ margin-bottom: 16px;
     cursor: pointer;
 }
 
-.cart-count {
-    position: absolute;
-    top: -10px;
-    right: 5px;
-    background-color: red;
+.add-to-cart-btn {
+    background-color: #28a745;
     color: white;
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 12px;
-    min-width: 18px;
-    text-align: center;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 700;
 }
+
+.add-to-cart-btn:hover {
+    background-color: #218838;
+}
+
 /*SHOPPING CART*/
 
 .shopping_cart {
@@ -681,6 +683,7 @@ body.show-cart::before {
 .product-actions {
     display: flex;
     gap: 15px;
+    justify-content: center;
 }
 
 .add-to-cart,
@@ -734,8 +737,8 @@ body.show-cart::before {
 }
 
 .tab-btn.active, .tab-btn:hover {
-    border-bottom-color: #007bff;
-    color: #007bff;
+    border-bottom-color: #024835;
+    color: #024835;
 }
 
 .tab-pane {
