@@ -58,7 +58,7 @@ function initializeCheckout() {
     }
     
     // Initialize form validation
-    initializeFormValidation();
+    // No custom validation needed - using HTML/CSS validation only
     
     // Check if cart is empty
     if (checkoutCart.length === 0) {
@@ -151,137 +151,8 @@ function updateCheckoutTotal() {
     totalElement.textContent = total.toFixed(2);
 }
 
-function initializeFormValidation() {
-    const form = document.getElementById('checkoutForm');
-    const inputs = form.querySelectorAll('input[required]');
-    
-    inputs.forEach(input => {
-        input.addEventListener('blur', validateInput);
-        input.addEventListener('input', clearErrorStyle);
-    });
-    
-    // Special validation for card number
-    const cardInput = document.getElementById('cardNumber');
-    if (cardInput) {
-        cardInput.addEventListener('input', formatCardNumber);
-    }
-    
-    // Phone number formatting
-    const phoneInput = document.getElementById('phone');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', formatPhoneNumber);
-    }
-}
-
-function validateInput(event) {
-    const input = event.target;
-    const value = input.value.trim();
-    
-    // Remove existing error styling
-    clearErrorStyle(event);
-    
-    switch(input.type) {
-        case 'email':
-            if (!isValidEmail(value)) {
-                showInputError(input, 'Please enter a valid email address');
-            }
-            break;
-        case 'tel':
-            if (!isValidPhone(value)) {
-                showInputError(input, 'Please enter a valid phone number');
-            }
-            break;
-        case 'text':
-            if (input.id === 'cardNumber' && !isValidCardNumber(value)) {
-                showInputError(input, 'Please enter a valid card number (16 digits)');
-            }
-            break;
-    }
-}
-
-function clearErrorStyle(event) {
-    const input = event.target;
-    input.classList.remove('error');
-    const errorMsg = input.parentNode.querySelector('.error-message');
-    if (errorMsg) {
-        errorMsg.remove();
-    }
-}
-
-function showInputError(input, message) {
-    input.classList.add('error');
-    
-    // Remove existing error message
-    const existingError = input.parentNode.querySelector('.error-message');
-    if (existingError) {
-        existingError.remove();
-    }
-    
-    // Add new error message
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.textContent = message;
-    input.parentNode.appendChild(errorDiv);
-}
-
-function formatCardNumber(event) {
-    let value = event.target.value.replace(/\D/g, ''); // Remove non-digits
-    if (value.length > 16) value = value.substr(0, 16); // Limit to 16 digits
-    
-    // Add spaces every 4 digits
-    value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-    event.target.value = value;
-}
-
-function formatPhoneNumber(event) {
-    let value = event.target.value.replace(/\D/g, ''); // Remove non-digits
-    if (value.length > 10) value = value.substr(0, 10); // Limit to 10 digits
-    
-    // Format as (XXX) XXX-XXXX
-    if (value.length >= 6) {
-        value = `(${value.substr(0, 3)}) ${value.substr(3, 3)}-${value.substr(6)}`;
-    } else if (value.length >= 3) {
-        value = `(${value.substr(0, 3)}) ${value.substr(3)}`;
-    }
-    
-    event.target.value = value;
-}
-
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-function isValidPhone(phone) {
-    const phoneRegex = /^\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$/;
-    return phoneRegex.test(phone);
-}
-
-function isValidCardNumber(cardNumber) {
-    const cleanNumber = cardNumber.replace(/\s/g, '');
-    return cleanNumber.length === 16 && /^\d+$/.test(cleanNumber);
-}
-
 function handleFormSubmission(event) {
     event.preventDefault();
-    
-    // Validate all required fields
-    const form = event.target;
-    const inputs = form.querySelectorAll('input[required]');
-    let isValid = true;
-    
-    inputs.forEach(input => {
-        if (!input.value.trim()) {
-            showInputError(input, 'This field is required');
-            isValid = false;
-        } else {
-            // Trigger validation
-            validateInput({ target: input });
-            if (input.classList.contains('error')) {
-                isValid = false;
-            }
-        }
-    });
     
     // Check if cart is empty
     if (checkoutCart.length === 0) {
@@ -289,15 +160,8 @@ function handleFormSubmission(event) {
         return;
     }
     
-    if (isValid) {
-        processOrder();
-    } else {
-        // Scroll to first error
-        const firstError = form.querySelector('.error');
-        if (firstError) {
-            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }
+    // Process the order (HTML/CSS validation will handle required fields)
+    processOrder();
 }
 
 function processOrder() {
