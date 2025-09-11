@@ -352,6 +352,16 @@ function removeFromCart(itemId, itemSize = '') {
     updateCartCounter();
     displayCartItems();
     updateCartTotal();
+    
+    // Update shopping cart sidebar if open
+    if (document.body.classList.contains('show-cart')) {
+        displayShoppingCartItems();
+        updateShoppingCartTotal();
+    }
+}
+
+function saveCartToStorage() {
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 function updateCartTotal() {
@@ -368,9 +378,11 @@ function checkout() {
         return;
     }
     
-    alert('Redirecting to checkout...');
-    // Here you would typically redirect to a checkout page
-    // window.location.href = 'checkout.html';
+    // Save cart to localStorage before redirecting
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Redirect to checkout page
+    window.location.href = 'checkout.html';
 }
 
 // Shopping Cart Sidebar Functions
@@ -460,14 +472,13 @@ function addShoppingCartEventListeners() {
         button.addEventListener('click', function() {
             const id = this.getAttribute('data-id');
             const size = this.getAttribute('data-size') || '';
-            const itemIndex = cart.findIndex(item => item.id == id && (item.size || '') === size);
-            if (itemIndex > -1) {
-                cart.splice(itemIndex, 1);
-                updateCartCounter();
-                displayShoppingCartItems();
-                updateShoppingCartTotal();
-                saveCartToStorage();
-            }
+            
+            // Use the main removeFromCart function to ensure all systems stay in sync
+            removeFromCart(id, size);
+            
+            // Update shopping cart sidebar displays
+            displayShoppingCartItems();
+            updateShoppingCartTotal();
         });
     });
 }
