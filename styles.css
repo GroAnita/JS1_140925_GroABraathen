@@ -30,7 +30,12 @@
     cursor: pointer;
     max-width: 800px;
 }
-
+.price-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}       
 .product-box:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
