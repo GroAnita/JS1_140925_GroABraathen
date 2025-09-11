@@ -57,8 +57,6 @@ function initializeCheckout() {
         });
     }
     
-    // Initialize form validation
-    // No custom validation needed - using HTML/CSS validation only
     
     // Check if cart is empty
     if (checkoutCart.length === 0) {

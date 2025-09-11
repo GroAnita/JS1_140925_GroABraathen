@@ -1152,6 +1152,7 @@ body.show-cart::before {
     display: none;
     align-items: center;
     justify-content: center;
+    
 }
 
 .cart-content {
@@ -1169,12 +1170,17 @@ body.show-cart::before {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #dddddd;
+    background-color: #357135;
+    border-radius: 8px;
+    margin: auto;
 }
-
+    
 .cart-header h2 {
     margin: 0;
-    color: #333;
+    color: #fff;
+    font-size: 1.6rem;
+    
 }
 
 .close-cart {
