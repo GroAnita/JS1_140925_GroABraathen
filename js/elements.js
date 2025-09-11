@@ -48,7 +48,7 @@ function displayNoResults(
  */
 function createPriceElements(product, contentContainer) {
   if (product.onSale) {
-    // Create price container to hold both prices
+    // Create price container to hold both prices and badge
     const priceContainer = document.createElement("div");
     priceContainer.className = "price-container";
 
@@ -57,30 +57,37 @@ function createPriceElements(product, contentContainer) {
     price.textContent = `$${product.discountedPrice}`;
     price.className = "card-price sale-price";
 
+    // Sale badge (in the middle)
+    const saleBadge = document.createElement("div");
+    saleBadge.className = "card-sale-badge";
+    saleBadge.textContent = "Sale";
+
     // Original price (strikethrough)
     const originalPrice = document.createElement("span");
     originalPrice.className = "card-original-price";
     originalPrice.textContent = `$${product.price}`;
 
-    // Sale badge
-    const saleBadge = document.createElement("span");
-    saleBadge.className = "card-sale-badge";
-    saleBadge.textContent = "Sale";
-
+    // Add elements to price container in order: price, badge, original price
     priceContainer.appendChild(price);
+    priceContainer.appendChild(saleBadge);
     priceContainer.appendChild(originalPrice);
+    
     contentContainer.appendChild(priceContainer);
-    contentContainer.appendChild(saleBadge);
 
     return priceContainer;
   } else {
-    // Regular price display
+    // Regular price display - also use price container for consistency
+    const priceContainer = document.createElement("div");
+    priceContainer.className = "price-container";
+    
     const price = document.createElement("p");
     price.className = "card-price";
     price.textContent = `$${product.price}`;
-    contentContainer.appendChild(price);
+    
+    priceContainer.appendChild(price);
+    contentContainer.appendChild(priceContainer);
 
-    return price;
+    return priceContainer;
   }
 }
 
@@ -126,6 +133,52 @@ function createSizeOptions(sizes) {
 }
 
 /**
+ * Creates a size dropdown selection
+ * @param {Array} sizes - Array of available sizes
+ * @returns {HTMLElement} - The size dropdown container
+ */
+function createSizeDropdown(sizes) {
+  const sizeContainer = document.createElement("div");
+  sizeContainer.className = "size-dropdown-container";
+
+  const sizeLabel = document.createElement("label");
+  sizeLabel.textContent = "Size:";
+  sizeLabel.className = "size-label";
+
+  const sizeSelect = document.createElement("select");
+  sizeSelect.className = "size-dropdown";
+  
+  // Add default option
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Select Size";
+  defaultOption.disabled = true;
+  defaultOption.selected = true;
+  sizeSelect.appendChild(defaultOption);
+
+  // Add size options
+  if (sizes && sizes.length > 0) {
+    sizes.forEach((size) => {
+      const option = document.createElement("option");
+      option.value = size;
+      option.textContent = size;
+      sizeSelect.appendChild(option);
+    });
+  } else {
+    // If no sizes available, add "One Size" option
+    const oneSizeOption = document.createElement("option");
+    oneSizeOption.value = "one-size";
+    oneSizeOption.textContent = "One Size";
+    sizeSelect.appendChild(oneSizeOption);
+  }
+
+  sizeContainer.appendChild(sizeLabel);
+  sizeContainer.appendChild(sizeSelect);
+
+  return sizeContainer;
+}
+
+/**
  * Handles API fetch and provides error handling
  * @param {string} url - The API URL to fetch from
  * @returns {Promise} - Resolves with data or rejects with error
@@ -139,4 +192,77 @@ async function fetchApi(url) {
 
   const data = await response.json();
   return data.data;
+}
+
+/**
+ * Filters products based on category
+ * @param {Array} products - Array of all products
+ * @param {string} category - Category to filter by (empty string shows all)
+ * @returns {Array} - Filtered products array
+ */
+function filterProductsByCategory(products, category) {
+  if (!products || products.length === 0) return [];
+
+  let filteredProducts = products;
+
+  if (category && category !== 'all' && category !== '') {
+    filteredProducts = products.filter(product => {
+      const productGender = product.gender ? product.gender.toLowerCase() : '';
+      const productTitle = product.title ? product.title.toLowerCase() : '';
+      const productTags = product.tags ? product.tags.join(', ').toLowerCase() : '';
+      
+      switch (category) {
+        case "women":
+          return productGender.includes("female") || 
+                 productTitle.includes('women') || 
+                 productTitle.includes('female') ||
+                 productTags.includes('women') ||
+                 productTags.includes('female');
+                 
+        case "men":
+          return productGender === "male" || 
+                 /\bmen\b/i.test(productTitle) || 
+                 /\bmale\b/i.test(productTitle) ||
+                 /\bmen\b/i.test(productTags) ||
+                 /\bmale\b/i.test(productTags);
+
+        case 'accessories':
+          return productTitle.includes('accessory') ||
+                 productTitle.includes('accessories') ||
+                 productTags.includes('accessories');
+
+        default:
+          return true;
+      }
+    });
+  }
+
+  return filteredProducts;
+}
+
+/**
+ * Initializes the category filter functionality
+ * @param {Array} allProducts - All products array
+ * @param {Function} displayCallback - Function to call when filter changes
+ */
+function initializeCategoryFilter(allProducts, displayCallback) {
+  const categoryFilter = document.getElementById('categoryFilter');
+  
+  if (!categoryFilter) {
+    console.warn('Category filter element not found');
+    return;
+  }
+  
+  categoryFilter.addEventListener('change', function() {
+    const selectedCategory = this.value;
+    console.log('Filter changed to:', selectedCategory);
+    
+    const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
+    console.log('Filtered products:', filteredProducts.length);
+    
+    // Call the display function with filtered products
+    if (typeof displayCallback === 'function') {
+      displayCallback(filteredProducts);
+    }
+  });
 }

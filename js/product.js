@@ -38,11 +38,6 @@ function createProductDetail(product) {
   title.textContent = product.title;
   productInfo.appendChild(title);
 
-  // Add gender
-  const gender = document.createElement("span");
-  gender.className = "product-gender";
-  gender.textContent = product.gender;
-  productInfo.appendChild(gender);
 
   // Add description
   const description = document.createElement("p");
@@ -76,10 +71,6 @@ function createProductDetail(product) {
   const addToCartBtn = document.createElement("button");
   addToCartBtn.className = "add-to-cart";
 
-  const cartIcon = document.createElement("i");
-  cartIcon.className = "fas fa-shopping-cart";
-  addToCartBtn.appendChild(cartIcon);
-
   const cartText = document.createTextNode(" Add to Cart");
   addToCartBtn.appendChild(cartText);
 
@@ -87,12 +78,15 @@ function createProductDetail(product) {
     alert("Product added to cart!");
   });
 
-  // Add button to product info
-  productInfo.appendChild(addToCartBtn);
+  // Add button to actions container
+  actionsDiv.appendChild(addToCartBtn);
 
   // Add image and info to product detail container
   productDetail.appendChild(productImage);
   productDetail.appendChild(productInfo);
+  
+  // Add the actions div (with button) to the bottom of product detail
+  productDetail.appendChild(actionsDiv);
 
   // Add the complete product detail to the main container
   productContainer.appendChild(productDetail);
