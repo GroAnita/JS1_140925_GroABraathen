@@ -454,10 +454,8 @@ body.show-cart::before {
 .product-specifications {
     margin-bottom: 25px;
 }
-
-.product-features ul {
-    list-style-type: disc;
-    padding-left: 20px;
+.product-specifications  {
+    color: rgb(7, 70, 66);
 }
 
 .product-options {
