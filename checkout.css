@@ -1,0 +1,227 @@
+/* Total Amount Section */
+.total_amount {
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+    padding: 20px;
+}
+
+.total_amount h3 {
+    margin: 20px 0;
+    color: #333;
+}
+
+.checkout_form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 500px;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.checkout_form label {
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.checkout_form input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.returnCart button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #003d7e;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 24px;
+}
+
+.returnCart button:hover {
+    background-color: #0056b3;
+}
+
+.checkout_form button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    background-color: #135021;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 24px;
+    font-weight: 700;
+}
+
+.checkout_form button:hover {
+    background-color: #218838;
+}
+
+.checkout_form button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Form Validation Styles */
+.checkout_form input.error {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+.checkout_form .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+
+.checkout_form input:invalid {
+    border-color: #dc3545;
+}
+
+.checkout_form input:valid {
+    border-color: #28a745;
+}
+
+.checkout_form input:required:invalid {
+    border-color: #c99fa3;
+    box-shadow: 0 0 0 0.2rem rgba(216, 133, 142, 0.25);
+}
+
+.checkout_form input:required:valid {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.checkout_form input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.checkout_form input:focus:invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Empty Checkout Styles */
+.empty-checkout {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #d7fdf5;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.empty-checkout h2 {
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.empty-checkout p {
+    color: #6c757d;
+    margin-bottom: 25px;
+}
+
+.return-home-btn {
+    background-color: #004288;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.return-home-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Checkout Layout Styles */
+.checkoutlayout {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.checkoutlayout h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.cart_items {
+ 
+    width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.checkout-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #09492e;
+    padding: 15px;
+    margin: 0 auto 15px auto;
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+.checkout-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.item-details h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.item-details p {
+    margin: 2px 0;
+    color: #666;
+}
+
+.item-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.remove-checkout-item {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+}
+
+.remove-checkout-item:hover {
+    background-color: #c82333;
+}
+
+.remove-checkout-item i {
+    font-size: 14px;
+}
+.checkouth2 {
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 2rem;
+    color: rgb(229, 17, 17)
+}

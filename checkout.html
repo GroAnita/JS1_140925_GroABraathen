@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="checkout.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>RainyDays - Checkout</title>
 </head>
@@ -23,13 +24,12 @@
         </span>
         <span class="header_links">
         <a href="index.html">Home</a>
-        <a href="about.html">about us</a>
-        <a href="services.html">Services</a>
+        <a href="about.html">About us</a>
         <a href="contact.html">Contact</a>
         </span>
     </header>
     
-    <!-- Shopping Cart Overlay -->
+    <!-- My shopping Cart Overlay -->
     <div class="cart-overlay" id="cartOverlay">
         <div class="cart-content">
             <div class="cart-header">
@@ -37,7 +37,7 @@
                 <span class="close-cart" id="closeCart">&times;</span>
             </div>
             <div class="cart-items" id="cartItems">
-                <!-- Cart items will be added here by JavaScript -->
+                <!-- Cart items will be added here by JavaScript..hopefully -->
             </div>
             <div class="cart-bottom">
                 <div class="cart-total">
@@ -55,7 +55,7 @@
             <button class="close-btn" onclick="closeShoppingCart()">&times;</button>
         </div>
         <div class="cart-items" id="shoppingCartItems">
-            <!-- Cart items will be added here by JavaScript -->
+            <!-- Cart items will be added here by JavaScript.. again, hopefully -->
         </div>
         <div class="cart-footer">
             <div class="cart-total">
@@ -71,7 +71,7 @@
         </div>
         <h1>Products in Cart</h1>
         <div class="cart_items"></div>
-            <!-- Cart items will be dynamically added here, no need for text -->
+            <!-- Cart items will be dynamically added here, no need for any of the text -->
         </div>
 
         <div class="total_amount">
@@ -98,7 +98,7 @@
                 </form>
 
     </div>
-
+</div>
     <footer>
         <div class="logofooter">
             <img src="images/RainyDays_Logo.png" alt="RainyDays Logo" />
@@ -129,6 +129,6 @@
 <script src="js/home.js"></script>
 <script src="js/checkout.js"></script>
 
-</div>
+
 </body>
 </html>
