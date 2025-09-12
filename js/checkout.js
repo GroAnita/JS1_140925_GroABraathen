@@ -57,6 +57,8 @@ function initializeCheckout() {
         });
     }
     
+    // Add basic form validation
+    initializeBasicValidation();
     
     // Check if cart is empty
     if (checkoutCart.length === 0) {
@@ -147,6 +149,43 @@ function updateCheckoutTotal() {
     
     const total = checkoutCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     totalElement.textContent = total.toFixed(2);
+}
+
+function initializeBasicValidation() {
+    const form = document.getElementById('checkoutForm');
+    if (!form) return;
+    
+    // Add simple validation on form submit
+    form.addEventListener('submit', function(event) {
+        const isValid = validateForm();
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+}
+
+function validateForm() {
+    const form = document.getElementById('checkoutForm');
+    const requiredFields = form.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.style.borderColor = '#dc3545';
+            isValid = false;
+        } else {
+            field.style.borderColor = '#28a745';
+        }
+    });
+    
+    // Simple email validation
+    const emailField = form.querySelector('[type="email"]');
+    if (emailField && emailField.value && !emailField.value.includes('@')) {
+        emailField.style.borderColor = '#dc3545';
+        isValid = false;
+    }
+    
+    return isValid;
 }
 
 function handleFormSubmission(event) {

@@ -128,7 +128,23 @@ function initializeAddToCart(product) {
     const addToCartBtn = document.getElementById('addToCartBtn');
     const quantityInput = document.getElementById('quantity');
     const sizeSelect = document.getElementById('sizeSelect');
+    const buyNowBtn = document.getElementById('buyNowBtn');
     
+    buyNowBtn.addEventListener('click', function() {
+        const quantity = parseInt(quantityInput.value) || 1;
+        const selectedSize = sizeSelect.value;
+
+        // Check if size is required but not selected
+        if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+            showCustomAlert('Please select a size', 'Size Required');
+            return;
+        }
+
+        // Proceed to checkout with the selected options
+        proceedToCheckout(product, quantity, selectedSize);
+    });
+
+
     addToCartBtn.addEventListener('click', function() {
         const quantity = parseInt(quantityInput.value) || 1;
         const selectedSize = sizeSelect.value;
@@ -149,6 +165,21 @@ function initializeAddToCart(product) {
             'Added to Cart'
         );
     });
+}
+
+function proceedToCheckout(product, quantity, selectedSize) {
+    for(let i = 0; i < quantity; i++) {
+        addToCart(product, selectedSize);
+    }
+
+    showCustomAlert(
+        `${product.title}${selectedSize ? ` (Size: ${selectedSize})` : ''} added to cart! Redirecting to Checkout...`,
+        'Going to Checkout'
+    );
+
+    setTimeout(() => {
+        window.location.href = 'checkout.html';
+    }, 1500);
 }
 
 function initializeTabs() {
