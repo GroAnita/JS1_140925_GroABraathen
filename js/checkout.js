@@ -265,6 +265,7 @@ function clearCart() {
     updateCartCounter();
     displayCheckoutItems();
     updateCheckoutTotal();
+    window.location.reload();
 }
 
 function saveOrderHistory(orderData) {

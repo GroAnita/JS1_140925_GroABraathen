@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (productsGrid) {
         fetchProducts(); // Only fetch if the products grid exists
     } else {
-        console.error("Products grid not found in HTML");
     }
     
     // Initializing the shopping bag functionality
@@ -265,8 +264,6 @@ function decreaseQuantity(itemId, itemSize = '') {
 }
 
 function removeFromCart(itemId, itemSize = '') {
-    console.log('Removing item with ID:', itemId, 'size:', itemSize);
-    console.log('Cart before removal:', cart);
     cart = cart.filter(item => {
         if (itemSize) {
             return !(String(item.id) === String(itemId) && item.size === itemSize);
@@ -274,18 +271,11 @@ function removeFromCart(itemId, itemSize = '') {
             return !(String(item.id) === String(itemId) && !item.size);
         }
     });
-    console.log('Cart after removal:', cart);
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCounter();
     displayShoppingCartItems();
     updateCartTotal();
-    // If cart is now empty, trigger checkout page update
-    if (cart.length === 0) {
-        // If checkout page functions are available, call them
-        if (typeof displayCheckoutItems === 'function') displayCheckoutItems();
-        if (typeof updateCheckoutTotal === 'function') updateCheckoutTotal();
-        if (typeof updateCartCounter === 'function') updateCartCounter();
-    }
+     window.location.reload(); // This will reload the page
     // Update shopping cart sidebar if open
     if (document.body.classList.contains('show-cart')) {
         displayShoppingCartItems();
