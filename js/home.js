@@ -1,44 +1,27 @@
-let productsGrid; // The grid where products will be displayed
-let allProducts = [];
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let productsGrid; // The grid where my products will be displayed..hopefully
+let allProducts = []; // the array that hold all the API products
+let cart = JSON.parse(localStorage.getItem('cart')) || []; // tries to load the cart from localStorage or initializing as an empty array
 
 // Wait for DOM to be ready before selecting elements and starting
 document.addEventListener('DOMContentLoaded', function() {
     productsGrid = document.querySelector(".products-grid");
     if (productsGrid) {
-        fetchProducts(); // Only fetch if grid exists
+        fetchProducts(); // Only fetch if the products grid exists
     } else {
         console.error("Products grid not found in HTML");
     }
     
-    // Initialize shopping bag functionality
+    // Initializing the shopping bag functionality
     initializeShoppingBag();
     updateCartCounter();
 });
 
+// my shoppingbag and cart functions
 function initializeShoppingBag() {
     const shoppingBag = document.querySelector('.shopping_bag');
-    const cartOverlay = document.getElementById('cartOverlay');
-    const closeCart = document.getElementById('closeCart');
-    
     if (shoppingBag) {
         shoppingBag.addEventListener('click', function() {
-            openShoppingCart(); // Changed to open shopping cart sidebar
-        });
-    }
-    
-    if (closeCart) {
-        closeCart.addEventListener('click', function() {
-            closeCartOverlay();
-        });
-    }
-    
-    // Close cart when clicking outside the cart content
-    if (cartOverlay) {
-        cartOverlay.addEventListener('click', function(e) {
-            if (e.target === cartOverlay) {
-                closeCartOverlay();
-            }
+            openShoppingCart();
         });
     }
 }
@@ -156,7 +139,7 @@ function displayProducts(products) {
         addToCartButton.dataset.id = product.id;
         addToCartButton.textContent = "Add to Cart";
         
-        // Add click event to add item to cart
+        // Add click event to add an item to cart
         addToCartButton.addEventListener('click', function(e) {
             e.preventDefault(); // Prevent navigation
             
@@ -165,7 +148,7 @@ function displayProducts(products) {
             const sizeDropdown = productBox.querySelector('.size-dropdown');
             const selectedSize = sizeDropdown ? sizeDropdown.value : '';
             
-            // Check if size is selected (if sizes are available)
+            // Check if size is selected or give an alert
             if (product.sizes && product.sizes.length > 0 && !selectedSize) {
                 alert('Please select a size before adding to cart');
                 return;
@@ -178,81 +161,28 @@ function displayProducts(products) {
         
         createPriceElements(product, content);
         
-        // Add size dropdown
+        // Adding the size dropdown
         const sizeDropdown = createSizeDropdown(product.sizes);
         content.appendChild(sizeDropdown);
         
-        // Add View Product button
+        // Adding the View Product button that goes to the product page
         const viewProductButton = document.createElement("button");
         viewProductButton.className = "view-product";
         viewProductButton.textContent = "View Product";
         viewProductButton.addEventListener('click', function() {
             window.location.href = `productpage.html?id=${product.id}`;
         });
-        content.appendChild(viewProductButton);
-        
+
+        content.appendChild(viewProductButton);      
         content.appendChild(addToCartButton);
 
         productBox.appendChild(productImage);
         productBox.appendChild(content);
-        productsGrid.appendChild(productBox); // Remove link wrapper
+        productsGrid.appendChild(productBox); 
     });
 }
 
 // Cart Overlay Functions
-function openCartOverlay() {
-    const cartOverlay = document.getElementById('cartOverlay');
-    if (cartOverlay) {
-        cartOverlay.style.display = 'flex';
-        displayCartItems();
-        updateCartTotal();
-    }
-}
-
-function closeCartOverlay() {
-    const cartOverlay = document.getElementById('cartOverlay');
-    if (cartOverlay) {
-        cartOverlay.style.display = 'none';
-    }
-}
-
-function displayCartItems() {
-    const cartItemsContainer = document.getElementById('cartItems');
-    
-    if (!cartItemsContainer) return;
-    
-    // Clear existing items
-    cartItemsContainer.innerHTML = '';
-    
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-        return;
-    }
-    
-    cart.forEach(item => {
-        const cartItem = document.createElement('div');
-        cartItem.className = 'cart-item';
-        
-        cartItem.innerHTML = `
-            <img src="${item.image}" alt="${item.title}">
-            <div class="cart-item-details">
-                <div class="cart-item-title">${item.title}${item.size ? ` - Size: ${item.size}` : ''}</div>
-                <div class="cart-item-price">$${item.price}</div>
-            </div>
-            <div class="cart-item-quantity">
-                <button class="quantity-btn decrease-btn" data-id="${item.id}" data-size="${item.size || ''}">-</button>
-                <span class="quantity-display">${item.quantity}</span>
-                <button class="quantity-btn increase-btn" data-id="${item.id}" data-size="${item.size || ''}">+</button>
-            </div>
-            <span class="remove-item" data-id="${item.id}" data-size="${item.size || ''}">🗑️</span>
-        `;
-        
-        cartItemsContainer.appendChild(cartItem);
-    });
-    
-    // Add event listeners for quantity buttons and remove buttons
-    addCartItemEventListeners();
-}
 
 function addCartItemEventListeners() {
     // Decrease quantity buttons
@@ -295,14 +225,12 @@ function increaseQuantity(itemId, itemSize = '') {
         item.quantity++;
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCounter();
-        displayCartItems();
+    displayShoppingCartItems();
         updateCartTotal();
     }
 }
 
 function decreaseQuantity(itemId, itemSize = '') {
-    console.log('Decreasing quantity for item:', itemId, 'size:', itemSize);
-    console.log('Current cart:', cart);
     
     const item = cart.find(item => {
         if (itemSize) {
@@ -311,14 +239,11 @@ function decreaseQuantity(itemId, itemSize = '') {
             return String(item.id) === String(itemId) && !item.size;
         }
     });
-    console.log('Found item:', item);
     
     if (item) {
         if (item.quantity > 1) {
             item.quantity--;
-            console.log('Decreased quantity to:', item.quantity);
         } else {
-            console.log('Removing item from cart');
             cart = cart.filter(cartItem => {
                 if (itemSize) {
                     return !(String(cartItem.id) === String(itemId) && cartItem.size === itemSize);
@@ -326,14 +251,12 @@ function decreaseQuantity(itemId, itemSize = '') {
                     return !(String(cartItem.id) === String(itemId) && !cartItem.size);
                 }
             });
-            console.log('Cart after removal:', cart);
         }
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCounter();
-        displayCartItems();
+    displayShoppingCartItems();
         updateCartTotal();
     } else {
-        console.log('Item not found in cart');
     }
 }
 
@@ -350,7 +273,7 @@ function removeFromCart(itemId, itemSize = '') {
     console.log('Cart after removal:', cart);
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCounter();
-    displayCartItems();
+    displayShoppingCartItems();
     updateCartTotal();
     
     // Update shopping cart sidebar if open
@@ -378,7 +301,7 @@ function checkout() {
         return;
     }
     
-    // Save cart to localStorage before redirecting
+    // Save cart to localStorage before redirecting to checkout
     localStorage.setItem('cart', JSON.stringify(cart));
     
     // Redirect to checkout page
