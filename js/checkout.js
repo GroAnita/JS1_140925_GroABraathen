@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize success modal
     initializeSuccessModal();
     
-    // Listen for storage changes (when cart is updated from other pages)
+    // Listen for storage changes (other tabs) and custom cartUpdated event (same tab)
     window.addEventListener('storage', function(event) {
         if (event.key === 'cart') {
             loadCartFromStorage();
@@ -28,6 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
             updateCheckoutTotal();
             updateCartCounter();
         }
+    });
+    window.addEventListener('cartUpdated', function() {
+        loadCartFromStorage();
+        displayCheckoutItems();
+        updateCheckoutTotal();
+        updateCartCounter();
     });
 });
 
@@ -123,7 +129,7 @@ function removeCheckoutItem(index) {
     // Remove item from checkout cart
     checkoutCart.splice(index, 1);
     
-    // Update global cart if it exists
+    // Updating global cart if it exists
     if (typeof cart !== 'undefined') {
         cart = [...checkoutCart];
     }
@@ -131,7 +137,7 @@ function removeCheckoutItem(index) {
     // Save updated cart to localStorage
     localStorage.setItem('cart', JSON.stringify(checkoutCart));
     
-    // Update displays
+    // Update the displays
     displayCheckoutItems();
     updateCheckoutTotal();
     updateCartCounter();
@@ -155,7 +161,6 @@ function initializeBasicValidation() {
     const form = document.getElementById('checkoutForm');
     if (!form) return;
     
-    // Add simple validation on form submit
     form.addEventListener('submit', function(event) {
         const isValid = validateForm();
         if (!isValid) {
@@ -178,13 +183,12 @@ function validateForm() {
         }
     });
     
-    // Simple email validation
+    // Email validation
     const emailField = form.querySelector('[type="email"]');
     if (emailField && emailField.value && !emailField.value.includes('@')) {
         emailField.style.borderColor = '#dc3545';
         isValid = false;
     }
-    
     return isValid;
 }
 
@@ -196,8 +200,6 @@ function handleFormSubmission(event) {
         alert('Your cart is empty! Please add items before checkout.');
         return;
     }
-    
-    // Process the order (HTML/CSS validation will handle required fields)
     processOrder();
 }
 
@@ -225,13 +227,11 @@ function processOrder() {
     showOrderProcessing();
     
     setTimeout(() => {
-        // Clear cart
         clearCart();
         
         // Show success modal
         showSuccessModal(orderId, deliveryDate);
         
-        // Optional: Save order to localStorage for order history
         saveOrderHistory(customerData);
     }, 2000);
 }
@@ -263,6 +263,8 @@ function clearCart() {
     cart = [];
     localStorage.removeItem('cart');
     updateCartCounter();
+    displayCheckoutItems();
+    updateCheckoutTotal();
 }
 
 function saveOrderHistory(orderData) {
@@ -323,12 +325,10 @@ function showEmptyCartMessage() {
     }
 }
 
-// Override the global placeOrder function if it exists
 function placeOrder(event) {
     handleFormSubmission(event);
 }
 
-// Override the global showCart function if it exists
 function showCart() {
     window.location.href = 'index.html';
 }

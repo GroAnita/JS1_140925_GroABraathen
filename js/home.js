@@ -1,3 +1,7 @@
+    // Dispatch custom event for instant update in same tab
+    window.dispatchEvent(new Event('cartUpdated'));
+    window.dispatchEvent(new Event('cartUpdated'));
+    window.dispatchEvent(new Event('cartUpdated'));
 let productsGrid; // The grid where my products will be displayed..hopefully
 let allProducts = []; // the array that hold all the API products
 let cart = JSON.parse(localStorage.getItem('cart')) || []; // tries to load the cart from localStorage or initializing as an empty array
@@ -275,11 +279,18 @@ function removeFromCart(itemId, itemSize = '') {
     updateCartCounter();
     displayShoppingCartItems();
     updateCartTotal();
-    
+    // If cart is now empty, trigger checkout page update
+    if (cart.length === 0) {
+        // If checkout page functions are available, call them
+        if (typeof displayCheckoutItems === 'function') displayCheckoutItems();
+        if (typeof updateCheckoutTotal === 'function') updateCheckoutTotal();
+        if (typeof updateCartCounter === 'function') updateCartCounter();
+    }
     // Update shopping cart sidebar if open
     if (document.body.classList.contains('show-cart')) {
         displayShoppingCartItems();
         updateShoppingCartTotal();
+        if (typeof updateCheckoutTotal === 'function') updateCheckoutTotal();
     }
 }
 
