@@ -265,7 +265,9 @@ function clearCart() {
     updateCartCounter();
     displayCheckoutItems();
     updateCheckoutTotal();
-    window.location.reload();
+    // Show SuccessModal here instead of reloading
+    showSuccessModal('OrderID', 'DeliveryDate'); // Replace with actual values
+    // window.location.reload(); // Remove or move to modal OK button
 }
 
 function saveOrderHistory(orderData) {
