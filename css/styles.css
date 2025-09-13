@@ -253,7 +253,7 @@ img {
 }
 
 footer {
-    background-color: #228270;
+    background-color: #03c19e;
     padding: 40px 20px 20px;
     text-align: center;
     border-top: 1px solid #e9ecef;
@@ -263,8 +263,8 @@ footer {
 }
 
 footer p {
-    margin: 10px 0 0;
-    color: #f2f2f2;
+    margin: 10px 0 ;
+    color: #000000;
     font-size: 14px;
 }
 
@@ -277,9 +277,6 @@ footer p {
     height: auto;
 }
 
-.logo {
-margin-bottom: 16px;
-}
 .logo img {
     max-width: 250px;
     height: auto;
