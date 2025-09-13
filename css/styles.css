@@ -286,7 +286,7 @@ margin-bottom: 16px;
 }
 
 .add-to-cart-btn {
-    background-color: #18632b;
+    background-color: #145b4b;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -638,9 +638,9 @@ body.show-cart::before {
 }
 
 .alert-btn {
-    background-color: #007bff;
+    background-color: #048025;
     color: white;
-    font-weight: 500;
+    font-weight: 700;
     border: none;
     padding: 12px 30px;
     border-radius: 5px;
@@ -650,7 +650,7 @@ body.show-cart::before {
 }
 
 .alert-btn:hover {
-    background-color: #0056b3;
+    background-color: #00c458;
 }
 
 @keyframes fadeIn {

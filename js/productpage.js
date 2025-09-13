@@ -38,36 +38,35 @@ async function fetchAndDisplayProduct(id) {
         displayProduct(currentProduct);
         
     } catch (error) {
-        console.error('Error fetching product:', error);
         showError('Failed to load product. Please try again.');
     }
 }
 
 function displayProduct(product) {
-    // Update page title
+    // Updating page title
     document.title = `RainyDays - ${product.title}`;
     
-    // Update main product image
+    // Updating main product image
     const mainImage = document.getElementById('mainProductImage');
     mainImage.src = product.image.url;
     mainImage.alt = product.image.alt;
     
-    // Update product title
+    // Updating product title
     document.getElementById('productTitle').textContent = product.title;
     
-    // Update product description
+    // Updating product description
     document.getElementById('productDescription').textContent = product.description;
     
-    // Update pricing
+    // Updating pricing
     updateProductPricing(product);
     
-    // Update sizes if available
+    // Updating sizes if available
     updateSizeOptions(product);
-    
-    // Update product specifications
+
+    // Updating product specifications
     updateProductSpecs(product);
     
-    // Initialize add to cart functionality
+    // Initialize add to cart function
     initializeAddToCart(product);
 }
 
@@ -108,7 +107,7 @@ function updateProductSpecs(product) {
     const specsContainer = document.getElementById('productSpecs');
     specsContainer.innerHTML = '';
     
-    // Add basic specs
+    // Add basic specs for product
     const specs = [
         { label: 'Brand', value: 'RainyDays' },
         { label: 'Material', value: product.material || 'High-quality materials' },
@@ -134,7 +133,7 @@ function initializeAddToCart(product) {
         const quantity = parseInt(quantityInput.value) || 1;
         const selectedSize = sizeSelect.value;
 
-        // Check if size is required but not selected
+        // Checking if size is required but not selected
         if (product.sizes && product.sizes.length > 0 && !selectedSize) {
             showCustomAlert('Please select a size', 'Size Required');
             return;
@@ -218,13 +217,13 @@ function displayLoading() {
     document.getElementById('productDescription').textContent = 'Loading product information...';
     document.getElementById('productPrice').textContent = '$0.00';
 }
-
+// if something goes wrong I show this error message
 function showError(message) {
     document.getElementById('productTitle').textContent = 'Error';
     document.getElementById('productDescription').textContent = message;
     document.getElementById('productPrice').textContent = '';
 }
-
+// this is my custom modal alert
 function initializeCustomAlert() {
     const modal = document.getElementById('customAlert');
     const closeBtn = document.querySelector('.alert-close');

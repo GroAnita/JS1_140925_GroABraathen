@@ -301,7 +301,7 @@ function initializeSuccessModal() {
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
     if (okBtn) okBtn.addEventListener('click', closeModal);
     
-    // Close modal when clicking outside
+    // Closing modal when clicking outside
     if (modal) {
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
@@ -316,8 +316,8 @@ function showEmptyCartMessage() {
     if (checkoutLayout) {
         checkoutLayout.innerHTML = `
             <div class="empty-checkout">
-                <h2>Your cart is empty</h2>
-                <p>Add some items to your cart before proceeding to checkout.</p>
+                <h2>Your cart is very empty</h2>
+                <p>Add some Rainyday items to your cart before proceeding to checkout.</p>
                 <button onclick="window.location.href='index.html'" class="return-home-btn">
                     Continue Shopping
                 </button>

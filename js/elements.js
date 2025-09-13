@@ -3,7 +3,6 @@
 
 function clearContainer(container) {
   if (!container) {
-    console.warn("Cannot clear container - element not found");
     return;
   }
   while (container.firstChild) {
@@ -249,16 +248,15 @@ function initializeCategoryFilter(allProducts, displayCallback) {
   const categoryFilter = document.getElementById('categoryFilter');
   
   if (!categoryFilter) {
-    console.warn('Category filter element not found');
     return;
   }
   
   categoryFilter.addEventListener('change', function() {
     const selectedCategory = this.value;
-    console.log('Filter changed to:', selectedCategory);
+   
     
     const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
-    console.log('Filtered products:', filteredProducts.length);
+   
     
     // Call the display function with filtered products
     if (typeof displayCallback === 'function') {

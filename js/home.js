@@ -85,7 +85,6 @@ function addToCart(product, selectedSize = '') {
     
     // Show brief feedback - no longer showing alert
     const sizeText = selectedSize ? ` (Size: ${selectedSize})` : '';
-    console.log(`${product.title}${sizeText} added to cart!`);
 }
 
 async function fetchProducts() {
@@ -98,19 +97,14 @@ async function fetchProducts() {
         // Initialize category filter after products are loaded
         initializeCategoryFilter(allProducts, displayProducts);
     } catch (error) {
-        console.error("Error fetching products:", error);
         
     }
 }
 function displayProducts(products) {
     clearContainer(productsGrid);
-
-    // Add debugging to see what we're getting
-    console.log("Products received:", products);
     
     // Check if products is an array
     if (!Array.isArray(products)) {
-        console.error("Products is not an array:", products);
         displayNoResults(productsGrid);
         return;
     }
