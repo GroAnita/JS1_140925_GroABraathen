@@ -55,14 +55,6 @@ function initializeCheckout() {
         checkoutForm.addEventListener('submit', handleFormSubmission);
     }
     
-    // Initialize return to cart button
-    const returnButton = document.getElementById('returnToCartButton');
-    if (returnButton) {
-        returnButton.addEventListener('click', function() {
-            window.location.href = 'index.html';
-        });
-    }
-    
     // Add basic form validation
     initializeBasicValidation();
     
@@ -116,7 +108,6 @@ function displayCheckoutItems() {
 }
 
 function addCheckoutItemEventListeners() {
-    // Remove item buttons
     document.querySelectorAll('.remove-checkout-item').forEach(button => {
         button.addEventListener('click', function() {
             const index = parseInt(this.getAttribute('data-index'));
@@ -129,7 +120,6 @@ function removeCheckoutItem(index) {
     // Remove item from checkout cart
     checkoutCart.splice(index, 1);
     
-    // Updating global cart if it exists
     if (typeof cart !== 'undefined') {
         cart = [...checkoutCart];
     }
@@ -142,7 +132,6 @@ function removeCheckoutItem(index) {
     updateCheckoutTotal();
     updateCartCounter();
     
-    // Update shopping cart sidebar if it exists and is open
     if (typeof displayShoppingCartItems === 'function' && document.body.classList.contains('show-cart')) {
         displayShoppingCartItems();
         updateShoppingCartTotal();
@@ -223,7 +212,6 @@ function processOrder() {
         deliveryDate: deliveryDate
     };
     
-    // Simulate order processing
     showOrderProcessing();
     
     setTimeout(() => {

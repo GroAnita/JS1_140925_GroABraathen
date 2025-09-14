@@ -6,7 +6,7 @@ let productsGrid; // The grid where my products will be displayed..hopefully
 let allProducts = []; // the array that hold all the API products
 let cart = JSON.parse(localStorage.getItem('cart')) || []; // tries to load the cart from localStorage or initializing as an empty array
 
-// Wait for DOM to be ready before selecting elements and starting
+// Waiting for DOM to be ready before selecting elements and starting
 document.addEventListener('DOMContentLoaded', function() {
     productsGrid = document.querySelector(".products-grid");
     if (productsGrid) {
@@ -38,7 +38,7 @@ function updateCartCounter() {
 }
 
 function addToCart(product, selectedSize = '') {
-    // Create a unique identifier that includes size for products with sizes
+    
     const itemKey = selectedSize ? `${product.id}-${selectedSize}` : product.id;
     
     // Check if item with same product and size already exists in cart
@@ -138,7 +138,7 @@ function displayProducts(products) {
         
         // Add click event to add an item to cart
         addToCartButton.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent navigation
+            e.preventDefault(); 
             
             // Get selected size from the dropdown in the same product box
             const productBox = this.closest('.product_box');
@@ -179,83 +179,6 @@ function displayProducts(products) {
     });
 }
 
-// Cart Overlay Functions
-
-function addCartItemEventListeners() {
-    // Decrease quantity buttons
-    document.querySelectorAll('.decrease-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const itemId = this.dataset.id;
-            const itemSize = this.dataset.size;
-            decreaseQuantity(itemId, itemSize);
-        });
-    });
-    
-    // Increase quantity buttons
-    document.querySelectorAll('.increase-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const itemId = this.dataset.id;
-            const itemSize = this.dataset.size;
-            increaseQuantity(itemId, itemSize);
-        });
-    });
-    
-    // Remove item buttons
-    document.querySelectorAll('.remove-item').forEach(button => {
-        button.addEventListener('click', function() {
-            const itemId = this.dataset.id;
-            const itemSize = this.dataset.size;
-            removeFromCart(itemId, itemSize);
-        });
-    });
-}
-
-function increaseQuantity(itemId, itemSize = '') {
-    const item = cart.find(item => {
-        if (itemSize) {
-            return String(item.id) === String(itemId) && item.size === itemSize;
-        } else {
-            return String(item.id) === String(itemId) && !item.size;
-        }
-    });
-    if (item) {
-        item.quantity++;
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCounter();
-    displayShoppingCartItems();
-        updateCartTotal();
-    }
-}
-
-function decreaseQuantity(itemId, itemSize = '') {
-    
-    const item = cart.find(item => {
-        if (itemSize) {
-            return String(item.id) === String(itemId) && item.size === itemSize;
-        } else {
-            return String(item.id) === String(itemId) && !item.size;
-        }
-    });
-    
-    if (item) {
-        if (item.quantity > 1) {
-            item.quantity--;
-        } else {
-            cart = cart.filter(cartItem => {
-                if (itemSize) {
-                    return !(String(cartItem.id) === String(itemId) && cartItem.size === itemSize);
-                } else {
-                    return !(String(cartItem.id) === String(itemId) && !cartItem.size);
-                }
-            });
-        }
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCounter();
-    displayShoppingCartItems();
-        updateCartTotal();
-    } else {
-    }
-}
 
 function removeFromCart(itemId, itemSize = '') {
     cart = cart.filter(item => {
@@ -280,14 +203,6 @@ function removeFromCart(itemId, itemSize = '') {
 
 function saveCartToStorage() {
     localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-function updateCartTotal() {
-    const cartTotalElement = document.getElementById('cartTotal');
-    if (!cartTotalElement) return;
-    
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    cartTotalElement.textContent = total.toFixed(2);
 }
 
 function checkout() {
@@ -391,7 +306,7 @@ function addShoppingCartEventListeners() {
             const id = this.getAttribute('data-id');
             const size = this.getAttribute('data-size') || '';
             
-            // Use the main removeFromCart function to ensure all systems stay in sync
+            // Using the main removeFromCart function to ensure all systems stay in sync
             removeFromCart(id, size);
             
             // Update shopping cart sidebar displays

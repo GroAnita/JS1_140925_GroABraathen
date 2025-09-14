@@ -1,6 +1,4 @@
 
-
-
 function clearContainer(container) {
   if (!container) {
     return;
@@ -10,11 +8,6 @@ function clearContainer(container) {
   }
 }
 
-/**
- * Displays an error message in a container
- * @param {HTMLElement} container - The container to display the error in
- * @param {string} message - The error message to display
- */
 function displayError(container, message) {
   clearContainer(container);
   const errorElement = document.createElement("p");
@@ -23,11 +16,6 @@ function displayError(container, message) {
   container.appendChild(errorElement);
 }
 
-/**
- * Displays a "no results" message in a container
- * @param {HTMLElement} container - The container to display the message in
- * @param {string} message - The message to display (defaults to "No products match your filter criteria")
- */
 function displayNoResults(
   container,
   message = "No products match your filter criteria."
@@ -39,19 +27,13 @@ function displayNoResults(
   container.appendChild(noResultsDiv);
 }
 
-/**
- * Creates price elements based on product sale status
- * @param {Object} product - The product object
- * @param {HTMLElement} contentContainer - The container to append price elements to
- * @returns {HTMLElement} - The price container element
- */
 function createPriceElements(product, contentContainer) {
   if (product.onSale) {
-    // Create price container to hold both prices and badge
+   
     const priceContainer = document.createElement("div");
     priceContainer.className = "price-container";
 
-    // Discounted price
+    // Discount price
     const price = document.createElement("p");
     price.textContent = `$${product.discountedPrice}`;
     price.className = "card-price sale-price";
@@ -66,7 +48,7 @@ function createPriceElements(product, contentContainer) {
     originalPrice.className = "card-original-price";
     originalPrice.textContent = `$${product.price}`;
 
-    // Add elements to price container in order: price, badge, original price
+    // Adding elements to price container in order: price, badge, original price
     priceContainer.appendChild(price);
     priceContainer.appendChild(saleBadge);
     priceContainer.appendChild(originalPrice);
@@ -75,7 +57,7 @@ function createPriceElements(product, contentContainer) {
 
     return priceContainer;
   } else {
-    // Regular price display - also use price container for consistency
+    
     const priceContainer = document.createElement("div");
     priceContainer.className = "price-container";
     
@@ -90,10 +72,7 @@ function createPriceElements(product, contentContainer) {
   }
 }
 
-/**
- * Creates a loading indicator
- * @param {HTMLElement} container - The container to display the loading indicator in
- */
+
 function displayLoading(container) {
   clearContainer(container);
   const loadingElem = document.createElement("div");
@@ -102,40 +81,7 @@ function displayLoading(container) {
   container.appendChild(loadingElem);
 }
 
-/**
- * Creates size selection options
- * @param {Array} sizes - Array of available sizes
- * @returns {HTMLElement} - The size options container
- */
-function createSizeOptions(sizes) {
-  const sizeOptions = document.createElement("div");
-  sizeOptions.className = "size-options";
 
-  sizes.forEach((size) => {
-    const sizeOption = document.createElement("div");
-    sizeOption.className = "size-option";
-    sizeOption.textContent = size;
-    sizeOption.addEventListener("click", function () {
-      // Remove selection from all sizes
-      document.querySelectorAll(".size-option").forEach((el) => {
-        el.style.borderColor = "#e0e0e0";
-        el.style.backgroundColor = "";
-      });
-      // Highlight selected size
-      this.style.borderColor = "#2ecc71";
-      this.style.backgroundColor = "rgba(46, 204, 113, 0.1)";
-    });
-    sizeOptions.appendChild(sizeOption);
-  });
-
-  return sizeOptions;
-}
-
-/**
- * Creates a size dropdown selection
- * @param {Array} sizes - Array of available sizes
- * @returns {HTMLElement} - The size dropdown container
- */
 function createSizeDropdown(sizes) {
   const sizeContainer = document.createElement("div");
   sizeContainer.className = "size-dropdown-container";
@@ -147,7 +93,7 @@ function createSizeDropdown(sizes) {
   const sizeSelect = document.createElement("select");
   sizeSelect.className = "size-dropdown";
   
-  // Add default option
+  // Adding default option
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
   defaultOption.textContent = "Select Size";
@@ -155,7 +101,7 @@ function createSizeDropdown(sizes) {
   defaultOption.selected = true;
   sizeSelect.appendChild(defaultOption);
 
-  // Add size options
+  // Adding size options
   if (sizes && sizes.length > 0) {
     sizes.forEach((size) => {
       const option = document.createElement("option");
@@ -177,11 +123,7 @@ function createSizeDropdown(sizes) {
   return sizeContainer;
 }
 
-/**
- * Handles API fetch and provides error handling
- * @param {string} url - The API URL to fetch from
- * @returns {Promise} - Resolves with data or rejects with error
- */
+
 async function fetchApi(url) {
   const response = await fetch(url);
 
@@ -193,12 +135,7 @@ async function fetchApi(url) {
   return data.data;
 }
 
-/**
- * Filters products based on category
- * @param {Array} products - Array of all products
- * @param {string} category - Category to filter by (empty string shows all)
- * @returns {Array} - Filtered products array
- */
+
 function filterProductsByCategory(products, category) {
   if (!products || products.length === 0) return [];
 
@@ -239,11 +176,7 @@ function filterProductsByCategory(products, category) {
   return filteredProducts;
 }
 
-/**
- * Initializes the category filter functionality
- * @param {Array} allProducts - All products array
- * @param {Function} displayCallback - Function to call when filter changes
- */
+
 function initializeCategoryFilter(allProducts, displayCallback) {
   const categoryFilter = document.getElementById('categoryFilter');
   
